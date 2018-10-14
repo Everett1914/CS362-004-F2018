@@ -644,7 +644,7 @@ int getCost(int cardNumber)
 }
 
 int adventurerCard(int z, int drawntreasure, int currentPlayer, int temphand[], struct gameState *state){
-  while(drawntreasure<2){
+  while(drawntreasure < 4){
     if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
       shuffle(currentPlayer, state);
     }
@@ -666,12 +666,10 @@ int adventurerCard(int z, int drawntreasure, int currentPlayer, int temphand[], 
 }
 
 int smithyCard(int currentPlayer, struct gameState *state, int handPos){
-  for (int i = 0; i < 3; i++){
+  for (int i = 0; i < 2; i++){
      drawCard(currentPlayer, state);
   }
 
-  //discard card from hand
-  discardCard(handPos, currentPlayer, state, 0);
   return 0;
 }
 
@@ -693,7 +691,7 @@ int stewardCard(int currentPlayer, struct gameState *state, int handPos, int cho
     drawCard(currentPlayer, state);
     drawCard(currentPlayer, state);
   }
-  else if (choice1 == 2){
+  else if (choice1 == 1){
     //+2 coins
     state->coins = state->coins + 2;
   }
@@ -710,9 +708,9 @@ int stewardCard(int currentPlayer, struct gameState *state, int handPos, int cho
 
 int cutpurseCard(int currentPlayer, struct gameState *state, int handPos){
   updateCoins(currentPlayer, state, 2);
-  for (int i = 0; i < state->numPlayers; i++){
+  for (int i = 0; i <= state->numPlayers; i++){
      if (i != currentPlayer){
-        for (int j = 0; j < state->handCount[i]; j++){
+        for (int j = 0; j <= state->handCount[i]; j++){
             if (state->hand[i][j] == copper){
                 discardCard(j, i, state, 0);
                 break;
@@ -1305,20 +1303,16 @@ int updateCoins(int player, struct gameState *state, int bonus)
   state->coins = 0;
 
   //add coins for each Treasure card in player's hand
-  for (i = 0; i < state->handCount[player]; i++)
-    {
-      if (state->hand[player][i] == copper)
-	{
-	  state->coins += 1;
-	}
-      else if (state->hand[player][i] == silver)
-	{
-	  state->coins += 2;
-	}
-      else if (state->hand[player][i] == gold)
-	{
-	  state->coins += 3;
-	}
+  for (i = 0; i < state->handCount[player]; i++){
+      if (state->hand[player][i] == copper){
+	       state->coins += 1;
+	    }
+      else if (state->hand[player][i] == silver){
+	       state->coins += 2;
+	    }
+      else if (state->hand[player][i] == gold){
+	       state->coins += 3;
+	    }
     }
 
   //add bonus
