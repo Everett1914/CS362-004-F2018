@@ -13,7 +13,7 @@
 int assertTrue(struct gameState *state, int searchCard, int tgt){
   int count = fullDeckCount(1, searchCard, state);
   if (count == tgt){
-    printf("fullDeckCount(): Pass-target count(%d) for specific card matches actual number of a specific card in Hand, Deck and Discard (%d).\n", tgt, count);
+    printf("FullDeckCount(): Pass-target count(%d) for specific card matches actual number of a specific card in Hand, Deck and Discard (%d).\n", tgt, count);
   }
   else{
     printf("FullDeckCount(): Fail-target count (%d) for specific card doesn't match actual number of a specific card Hand, Deck and Discard (%d).\n", tgt, count);
