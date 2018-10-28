@@ -73,7 +73,7 @@ int main (int argc, char** argv) {
   /****************************************************************************************************************/
   /*Test to see if the function correct calculates the total number of a specfic card in a given players hand, deck,
   and discard pile.*/
-  printf("___________________________________________________________\n");
+  printf("_____________________________\n");
   printf("Test for Correct Card Number.\n");
   tgt1 = 3;
   assertTrue(&G, silver, tgt1);  //Test Correct Card Count
@@ -82,7 +82,7 @@ int main (int argc, char** argv) {
 
   /****************************************************************************************************************/
   /*Test to see if the function returns a count of zero if the card does not exist in the deck, hand, and discard piles*/
-  printf("\n___________________________________________________________\n");
+  printf("_________________________________________________________\n");
   printf("Test for when card is not in deck, hand or discard piles.\n");
   tgt1 = 0;
   assertTrue(&G, gold, tgt1);  //Correctly catches when card does not exist
@@ -98,7 +98,7 @@ int main (int argc, char** argv) {
         G.deckCount[i]++;  //number of cards in the deck
       }
   }
-  printf("\n___________________________________________________________\n");
+  printf("___________________________________________________________\n");
   printf("Test for when either deck, hand or discard piles are empty.\n");
   tgt1 = 2;
   assertTrue(&G, silver, tgt1);  //Test Correct Card Count

@@ -505,8 +505,8 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state) {
   return 0;
 }
 
-int drawCard(int player, struct gameState *state)
-{	int count;
+int drawCard(int player, struct gameState *state){
+  int count;
   int deckCounter;
   if (state->deckCount[player] <= 0){//Deck is empty
 
