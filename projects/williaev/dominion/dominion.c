@@ -814,20 +814,17 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     case mine:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
 
-      if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
-	{
-	  return -1;
-	}
+      if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold){
+        return -1;
+	     }
 
-      if (choice2 > treasure_map || choice2 < curse)
-	{
-	  return -1;
-	}
+      if (choice2 > treasure_map || choice2 < curse){
+        return -1;
+	     }
 
-      if ( (getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2) )
-	{
-	  return -1;
-	}
+      if ( (getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2) ){
+        return -1;
+	    }
 
       gainCard(choice2, state, 2, currentPlayer);
 
@@ -835,24 +832,20 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
 
       //discard trashed card
-      for (i = 0; i < state->handCount[currentPlayer]; i++)
-	{
-	  if (state->hand[currentPlayer][i] == j)
-	    {
-	      discardCard(i, currentPlayer, state, 0);
-	      break;
-	    }
-	}
-
+      for (i = 0; i < state->handCount[currentPlayer]; i++){
+	       if (state->hand[currentPlayer][i] == j){
+	          discardCard(i, currentPlayer, state, 0);
+	          break;
+         }
+      }
       return 0;
 
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
 
-      if ( (getCost(state->hand[currentPlayer][choice1]) + 2) > getCost(choice2) )
-	{
-	  return -1;
-	}
+      if ( (getCost(state->hand[currentPlayer][choice1]) + 2) > getCost(choice2) ){
+	       return -1;
+      }
 
       gainCard(choice2, state, 0, currentPlayer);
 
@@ -860,15 +853,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
 
       //discard trashed card
-      for (i = 0; i < state->handCount[currentPlayer]; i++)
-	{
-	  if (state->hand[currentPlayer][i] == j)
-	    {
-	      discardCard(i, currentPlayer, state, 0);
-	      break;
-	    }
-	}
-
+      for (i = 0; i < state->handCount[currentPlayer]; i++){
+        if (state->hand[currentPlayer][i] == j){
+  	      discardCard(i, currentPlayer, state, 0);
+  	      break;
+	      }
+      }
 
       return 0;
 
@@ -883,40 +873,40 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     case baron:
       state->numBuys++;//Increase buys by 1!
       if (choice1 > 0){//Boolean true or going to discard an estate
-	int p = 0;//Iterator for hand!
-	int card_not_discarded = 1;//Flag for discard set!
-	while(card_not_discarded){
-	  if (state->hand[currentPlayer][p] == estate){//Found an estate card!
-	    state->coins += 4;//Add 4 coins to the amount of coins
-	    state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
-	    state->discardCount[currentPlayer]++;
-	    for (;p < state->handCount[currentPlayer]; p++){
-	      state->hand[currentPlayer][p] = state->hand[currentPlayer][p+1];
-	    }
-	    state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
-	    state->handCount[currentPlayer]--;
-	    card_not_discarded = 0;//Exit the loop
-	  }
-	  else if (p > state->handCount[currentPlayer]){
-	    if(DEBUG) {
-	      printf("No estate cards in your hand, invalid choice\n");
-	      printf("Must gain an estate if there are any\n");
-	    }
-	    if (supplyCount(estate, state) > 0){
-	      gainCard(estate, state, 0, currentPlayer);
-	      state->supplyCount[estate]--;//Decrement estates
-	      if (supplyCount(estate, state) == 0){
-		isGameOver(state);
-	      }
-	    }
-	    card_not_discarded = 0;//Exit the loop
-	  }
+      	int p = 0;//Iterator for hand!
+      	int card_not_discarded = 1;//Flag for discard set!
+      	while(card_not_discarded){
+	         if (state->hand[currentPlayer][p] == estate){//Found an estate card!
+      	    state->coins += 4;//Add 4 coins to the amount of coins
+      	    state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
+      	    state->discardCount[currentPlayer]++;
+	           for (;p < state->handCount[currentPlayer]; p++){
+	              state->hand[currentPlayer][p] = state->hand[currentPlayer][p+1];
+	           }
+        	   state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
+        	   state->handCount[currentPlayer]--;
+      	     card_not_discarded = 0;//Exit the loop
+	        }
+	        else if (p > state->handCount[currentPlayer]){
+	           if(DEBUG) {
+      	      printf("No estate cards in your hand, invalid choice\n");
+      	      printf("Must gain an estate if there are any\n");
+	           }
+    	    if (supplyCount(estate, state) > 0){
+    	      gainCard(estate, state, 0, currentPlayer);
+    	      state->supplyCount[estate]--;//Decrement estates
+    	      if (supplyCount(estate, state) == 0){
+          		isGameOver(state);
+    	      }
+	         }
+	       card_not_discarded = 0;//Exit the loop
+	     }
 
-	  else{
-	    p++;//Next card
-	  }
-	}
-      }
+  	  else{
+  	    p++;//Next card
+  	  }
+	   }
+    }
 
       else{
 	if (supplyCount(estate, state) > 0){
@@ -926,7 +916,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	    isGameOver(state);
 	  }
 	}
-      }
+}
 
 
       return 0;
@@ -1161,11 +1151,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
     case sea_hag:
       for (i = 0; i < state->numPlayers; i++){
-	if (i != currentPlayer){
-	  state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];			    state->deckCount[i]--;
-	  state->discardCount[i]++;
-	  state->deck[i][state->deckCount[i]--] = curse;//Top card now a curse
-	}
+	       if (i != currentPlayer){
+      	  state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];
+          state->deckCount[i]--;
+      	  state->discardCount[i]++;
+      	  state->deck[i][state->deckCount[i]--] = curse;//Top card now a curse
+	       }
       }
       return 0;
 

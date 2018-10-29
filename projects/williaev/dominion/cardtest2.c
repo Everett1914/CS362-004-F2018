@@ -1,7 +1,6 @@
 /*
- File: cardtest1.c
+ File: cardtest2.c
  Don't forget to add a number at the command line for the seed
- Testing executed with player ones hand.
  */
 
 #include "dominion.h"
@@ -20,7 +19,7 @@ int main (int argc, char** argv) {
   int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
            sea_hag, tribute, smithy};
 
-  printf ("\ncardtest1\n");
+  printf ("\ncardtest2\n");
   printf ("Testing adventurer card:\n");
   printf ("-------------------------------\n");
 

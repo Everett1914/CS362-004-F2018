@@ -71,7 +71,7 @@ int main (int argc, char** argv) {
   }
 
   /****************************************************************************************************************/
-  /*Test to see if the function correct calculates the total number of a specfic card in a given players hand, deck,
+  /*Test to see if the function correctly calculates the total number of a specfic card in a given players hand, deck,
   and discard pile.*/
   printf("_____________________________\n");
   printf("Test for Correct Card Number.\n");

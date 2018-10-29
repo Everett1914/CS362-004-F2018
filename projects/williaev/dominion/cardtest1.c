@@ -1,7 +1,6 @@
 /*
  File: cardtest1.c
  Don't forget to add a number at the command line for the seed
- Testing executed with player ones hand.
  */
 
 #include "dominion.h"

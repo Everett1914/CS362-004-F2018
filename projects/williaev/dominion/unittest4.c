@@ -33,7 +33,7 @@ int main (int argc, char** argv) {
            sea_hag, tribute, smithy};
 
   printf ("\nunittest4\n");
-  printf ("Testing shuffle Function:\n");
+  printf ("Testing numHandCards Function:\n");
   printf ("-------------------------------\n");
 
   /***********************************************************************************************************/
