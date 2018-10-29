@@ -28,7 +28,7 @@ int main (int argc, char** argv) {
   initializeGame(2, k, atoi(argv[1]), &G);  //set up game (each player has 7 coopers and 3 estates this also sets and shuffles decks)
   memcpy(&testG, &G, sizeof(struct gameState));
 
-  expectVal = 10;  //Player starts with 10 cards so expect deck+hand+discard = 10 is the player has 5 deck and 5 hand cards
+  expectVal = 10;  //Player starts with 10 cards so expect deck+hand+discard = 10 if the player has 5 deck and 5 hand cards
   player = 0;
   preVal = testG.handCount[player];
   printf("______________________________________________________________________________________\n");

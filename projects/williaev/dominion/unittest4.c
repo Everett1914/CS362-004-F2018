@@ -40,13 +40,13 @@ int main (int argc, char** argv) {
   /*********************************Initialize Game State*****************************************************/
   initializeGame(2, k, atoi(argv[1]), &G);  //set up game (each player has 7 coopers and 3 estates this also sets and shuffles decks)
   printf("__________________________________________________________________________________________________________\n");
-  printf("Test to see if the function gets correct correct # of handcards before and after a card is drawn the deck.\n");
+  printf("Test to see if the function gets correct # of handcards before and after a card is drawn the deck.\n");
   player0Hand1 = numHandCards(&G);
   drawCard(player, &G);
   player0Hand2 = numHandCards(&G);
   assertNumHandCards(player0Hand1, player0Hand2, 1);
   printf("____________________________________________________________________________________________________________________________\n");
-  printf("Test to see if the function gets correct correct # of handcards before and after a card is drawn when the player is changed.\n");
+  printf("Test to see if the function gets correct # of handcards before and after a card is drawn when the player is changed.\n");
   G.whoseTurn = 1;  //change to player 2
   player = 1;
   player1Hand1 = numHandCards(&G);

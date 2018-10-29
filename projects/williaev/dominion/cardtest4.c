@@ -41,7 +41,7 @@ int main (int argc, char** argv) {
   }
 
   printf("______________________________________________________________________________________________________\n");
-  printf("Test to see if opponents deck contains a sea_hag given the deck initially only had coppers and estates.\n");
+  printf("Test to see if opponents deck contains a curse given the deck initially only had coppers and estates.\n");
   if(testG.deck[player][testG.deckCount[player] -1] == curse){
     printf("sea_hag test:  Pass-opponent has a Sea Hag at the top of their deck\n");
   }
