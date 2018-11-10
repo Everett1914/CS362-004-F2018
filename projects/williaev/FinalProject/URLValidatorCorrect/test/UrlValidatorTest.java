@@ -17,7 +17,6 @@
 
 import junit.framework.TestCase;
 
-
 /**
  * Performs Validation Test for url validations.
  *
@@ -25,7 +24,7 @@ import junit.framework.TestCase;
  */
 public class UrlValidatorTest extends TestCase {
 
-   private final boolean printStatus = true;
+   private final boolean printStatus = false;
    private final boolean printIndex = false;//print index that indicates current scheme,host,port,path, query test were using.
 
    public UrlValidatorTest(String testName) {
@@ -108,8 +107,7 @@ protected void setUp() {
          if (printStatus) {
             if (printIndex) {
                System.out.print(testPartsIndextoString());
-            } 
-            else {
+            } else {
                if (result == expected) {
                   System.out.print('.');
                } else {
