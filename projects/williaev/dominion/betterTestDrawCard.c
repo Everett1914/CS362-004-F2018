@@ -1,8 +1,10 @@
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <math.h>
 #include "rngs.h"
 
 #define DEBUG 0
@@ -10,10 +12,11 @@
 
 int checkDrawCard(int p, struct gameState *post) {
   int r;
-    
+
   r = drawCard (p, post);
 
   assert (r == 0);
+  return 0;
 }
 
 int main () {
@@ -51,17 +54,17 @@ int main () {
   for (p = 0; p < 2; p++) {
     for (deckCount = 0; deckCount < 5; deckCount++) {
       for (discardCount = 0; discardCount < 5; discardCount++) {
-	for (handCount = 0; handCount < 5; handCount++) {
-	  memset(&G, 23, sizeof(struct gameState)); 
-	  r = initializeGame(2, k, 1, &G);
-	  G.deckCount[p] = deckCount;
-	  memset(G.deck[p], 0, sizeof(int) * deckCount);
-	  G.discardCount[p] = discardCount;
-	  memset(G.discard[p], 0, sizeof(int) * discardCount);
-	  G.handCount[p] = handCount;
-	  memset(G.hand[p], 0, sizeof(int) * handCount);
-	  checkDrawCard(p, &G);
-	}
+        for (handCount = 0; handCount < 5; handCount++) {
+      	  memset(&G, 23, sizeof(struct gameState));
+      	  r = initializeGame(2, k, 1, &G);
+      	  G.deckCount[p] = deckCount;
+      	  memset(G.deck[p], 0, sizeof(int) * deckCount);
+      	  G.discardCount[p] = discardCount;
+      	  memset(G.discard[p], 0, sizeof(int) * discardCount);
+      	  G.handCount[p] = handCount;
+      	  memset(G.hand[p], 0, sizeof(int) * handCount);
+      	  checkDrawCard(p, &G);
+	      }
       }
     }
   }
