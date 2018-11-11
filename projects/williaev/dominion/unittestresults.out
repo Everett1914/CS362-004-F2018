@@ -56,14 +56,44 @@ Testing shuffle Function:
 ________________________________________________________
 Test to see if the function correctly shuffles the deck.
 If shuffle is working expect this result to pass.
+Original: 1
+Shuffled: 1
+Original: 4
+Shuffled: 4
+Original: 1
+Shuffled: 1
+Original: 4
+Shuffled: 4
+Original: 4
+Shuffled: 4
 shuffle():  Fail-Deck was not shuffled
 ___________________________________________________________________________
 Since shuffle is not working this is a test to verify the test coding.
 Arrays are the same, but arranged differently.  Expect this result to pass.
+Original: 0
+Shuffled: 1
+Original: 1
+Shuffled: 0
+Original: 3
+Shuffled: 4
+Original: 4
+Shuffled: 3
+Original: 8
+Shuffled: 8
 shuffle():  Pass-deck was shuffled
 _________________________________________________________________________________
 Since shuffle is not working this is a test to verify the test coding.
 In this test arrays are the same size but different.  Expect this result to fail.
+Original: 7
+Shuffled: 6
+Original: 0
+Shuffled: 0
+Original: 5
+Shuffled: 5
+Original: 3
+Shuffled: 3
+Original: 8
+Shuffled: 8
 shuffle():  Fail-decks contain different elements
 File 'dominion.c'
 Lines executed:18.69% of 610
