@@ -7,89 +7,95 @@
 #include <assert.h>
 #include "rngs.h"
 
-#define DEBUG 0
-#define NOISY_TEST 1
+//machine for assert results, compares deck, discard, and hand numbers of pre and post states.
+int assertTrue(int preHand, int preDeck, int preDiscard, int postHand, int postDeck, int postDiscard){
+  if(preHand == postHand && preDeck == postDeck && preDiscard == postDiscard){  //return 1 (true)
+    return 1;
+  }
+  else{
+    return 0;
+  }
+}
 
-int checkDrawCard(int p, struct gameState *post) {
-  struct gameState pre;
-  memcpy (&pre, post, sizeof(struct gameState));
-
-  int r;
-  //  printf ("drawCard PRE: p %d HC %d DeC %d DiC %d\n",
-  //	  p, pre.handCount[p], pre.deckCount[p], pre.discardCount[p]);
-
-  r = drawCard (p, post);
-
-  //printf ("drawCard POST: p %d HC %d DeC %d DiC %d\n",
-  //      p, post->handCount[p], post->deckCount[p], post->discardCount[p]);
-
-  if (pre.deckCount[p] > 0) {
-    pre.handCount[p]++;
-    pre.hand[p][pre.handCount[p]-1] = pre.deck[p][pre.deckCount[p]-1];
-    pre.deckCount[p]--;
-  } else if (pre.discardCount[p] > 0) {
-    memcpy(pre.deck[p], post->deck[p], sizeof(int) * pre.discardCount[p]);
-    memcpy(pre.discard[p], post->discard[p], sizeof(int)*pre.discardCount[p]);
-    pre.hand[p][post->handCount[p]-1] = post->hand[p][post->handCount[p]-1];
-    pre.handCount[p]++;
-    pre.deckCount[p] = pre.discardCount[p]-1;
-    pre.discardCount[p] = 0;
+int checkAdventurerCard(int player, struct gameState *pre, struct gameState *post){
+  int drawntreasure = 0;
+  int z = 0;
+  int temphand1[MAX_HAND];
+  while(drawntreasure < 2){  //stop iterating when you've gone through the entire deck or you've found 2 treasure cards
+    if (pre->deckCount[player] < 1){//if the deck is empty we need to shuffle discard and add to deck
+      for (int i = 0; i < pre->discardCount[player];i++){
+        pre->deck[player][i] = pre->discard[player][i];
+        pre->discard[player][i] = -1;
+      }
+      shuffle(player, pre);
+      pre->deckCount[player] = pre->discardCount[player];
+      pre->discardCount[player] = 0; //Reset discard
+    }
+    drawCard(player, pre);
+    int cardDrawn = pre->hand[player][pre->handCount[player]-1];//top card of hand is most recently drawn card.
+    if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold){
+      drawntreasure++;
+    }
+    else{
+      temphand1[z]=cardDrawn;
+      pre->handCount[player]--; //this should just remove the top card (the most recently drawn one).
+      z++;
+    }
+  }
+  while(z-1 >= 0){
+    pre->discard[player][pre->discardCount[player]++]=temphand1[z-1]; // discard all cards in play that have been drawn
+    z=z-1;
   }
 
-  assert (r == 0);
-
-  assert(memcmp(&pre, post, sizeof(struct gameState)) == 0);
+  //assert(memcmp(&pre, post, sizeof(struct gameState)) == 0);  //memcmp could not be used due to randomness of shuffle.
+  if(assertTrue(pre->handCount[player], pre->deckCount[player], pre->discardCount[player], post->handCount[player], post->deckCount[player], post->discardCount[player])){
+    printf("Test Passed\n");
+  }
+  else{
+    printf("Test Failed\n");
+  }
   return 0;
 }
 
 int main () {
 
-  int i, n, r, p, deckCount, discardCount, handCount;
+  int i, n, p;
+  int bonus = -1;
+  struct gameState pre;
+  struct gameState post;
 
-  int k[10] = {adventurer, council_room, feast, gardens, mine,
-	       remodel, smithy, village, baron, great_hall};
-
-  struct gameState G;
-
-  printf ("Testing drawCard.\n");
+  printf ("Testing AdventurerCard.\n");
 
   printf ("RANDOM TESTS.\n");
 
   SelectStream(2);
   PutSeed(3);
 
-  for (n = 0; n < 2000; n++) {  //create random test state for the game.
+  for (n = 0; n < 20000; n++) {  //create random test state for the game.
+    printf("test#: %d\n", n);
     for (i = 0; i < sizeof(struct gameState); i++) {
-      ((char*)&G)[i] = floor(Random() * 256);
+      ((char*)&pre)[i] = floor(Random() * 256);
     }
+
+    //Create random deck, hand, and discard
     p = floor(Random() * 2);
-    G.deckCount[p] = floor(Random() * MAX_DECK);
-    G.discardCount[p] = floor(Random() * MAX_DECK);
-    G.handCount[p] = floor(Random() * MAX_HAND);
-    checkDrawCard(p, &G);
+    pre.deckCount[p] = floor(Random() * MAX_DECK);
+    for(i = 0; i < pre.deckCount[p]; i++){
+      pre.deck[p][i]=floor(Random() * 26);
+    }
+    pre.discardCount[p] = floor(Random() * MAX_DECK);
+    for(i = 0; i < pre.discardCount[p]; i++){
+      pre.discard[p][i]=floor(Random() * 26);
+    }
+    pre.handCount[p] = floor(Random() * MAX_HAND);
+    for(i = 0; i < pre.handCount[p]; i++){
+      pre.hand[p][i]=floor(Random() * 26);
+    }
+    pre.whoseTurn = p;
+    memcpy (&post, &pre, sizeof(struct gameState));
+    cardEffect(adventurer, -1, -1, -1, &post, -1, &bonus);
+    checkAdventurerCard(p, &pre, &post);
   }
 
-  printf ("ALL TESTS OK\n");
-
-  exit(0);
-
-  printf ("SIMPLE FIXED TESTS.\n");
-  for (p = 0; p < 2; p++) {
-    for (deckCount = 0; deckCount < 5; deckCount++) {
-      for (discardCount = 0; discardCount < 5; discardCount++) {
-	       for (handCount = 0; handCount < 5; handCount++) {
-        	  memset(&G, 23, sizeof(struct gameState));
-        	  r = initializeGame(2, k, 1, &G);
-        	  G.deckCount[p] = deckCount;
-        	  memset(G.deck[p], 0, sizeof(int) * deckCount);
-        	  G.discardCount[p] = discardCount;
-        	  memset(G.discard[p], 0, sizeof(int) * discardCount);
-        	  G.handCount[p] = handCount;
-        	  memset(G.hand[p], 0, sizeof(int) * handCount);
-        	  checkDrawCard(p, &G);
-	         }
-         }
-       }
-     }
   return 0;
 }
