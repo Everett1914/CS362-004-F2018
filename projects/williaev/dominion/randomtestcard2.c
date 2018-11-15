@@ -56,7 +56,7 @@ int main () {
   SelectStream(2);
   PutSeed(3);
 
-  for (n = 0; n < 20; n++) {  //create random test state for the game.
+  for (n = 0; n < 20000; n++) {  //create random test state for the game.
     printf("test#: %d\n", n);
     for (i = 0; i < sizeof(struct gameState); i++) {
       ((char*)&pre)[i] = floor(Random() * 256);
@@ -100,5 +100,6 @@ int main () {
     cardEffect(cutpurse, -1, -1, -1, &post, cutPursePos, &bonus);
     checkCutpurseCard(pre.whoseTurn, &pre, &post);
   }
+
   return 0;
 }
