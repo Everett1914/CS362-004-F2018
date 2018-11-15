@@ -64,6 +64,7 @@ int main () {
   struct gameState pre;
   struct gameState post;
 
+  printf("________________________\n");
   printf ("Testing AdventurerCard.\n");
 
   printf ("RANDOM TESTS.\n");
@@ -71,7 +72,7 @@ int main () {
   SelectStream(2);
   PutSeed(3);
 
-  for (n = 0; n < 20000; n++) {  //create random test state for the game.
+  for (n = 0; n < 20; n++) {  //create random test state for the game.
     printf("test#: %d\n", n);
     for (i = 0; i < sizeof(struct gameState); i++) {
       ((char*)&pre)[i] = floor(Random() * 256);

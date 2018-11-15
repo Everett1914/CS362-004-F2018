@@ -7,47 +7,11 @@
 #include <assert.h>
 #include "rngs.h"
 
-int compare1(const void* a, const void* b) {
-  if (*(int*)a > *(int*)b)
-    return 1;
-  if (*(int*)a < *(int*)b)
-    return -1;
-  return 0;
-}
-
-int checkCode(){
-  int arr[] = {1, 6, 5, 2, 9, 9, 23, 788, 90};
-  int size = sizeof(arr) / sizeof(arr[0]);
-  int newDeck[MAX_DECK];
-  int newDeckPos = 0;
-  int card;
-  int i;
-  qsort ((void*)arr, size, sizeof(int), compare1);
-  /* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
-
-  while (size > 0) {
-    card = floor(Random() * size);  //chooses random postion
-    newDeck[newDeckPos] = arr[card];
-    newDeckPos++;
-    for (i = card; i < size-1; i++) {
-      arr[i] = arr[i+1];
-    }
-    size--;
-  }
-  for (i = 0; i < newDeckPos; i++) {
-    arr[i] = newDeck[i];
-    size++;
-  }
-  for(i = 0; i < size; i++){
-    printf("arr[%d] = %d\n", i, arr[i]);
-  }
-
-  return 0;
-}
-
-//machine for assert results, compares decks.
-int assertTrue(int sumPre, int sumPost, int diffOrder){
-  if(sumPre == sumPost && diffOrder == 1){  //return 1 (true)
+//machine for assert results, compares deck, discard, and hand numbers of pre and post states.
+int assertTrue(int preHand, int preDeck, int preDiscard, int postHand, int postDeck, int postDiscard){
+  int preTotal = preHand + preDeck + preDiscard;
+  int postTotal = preHand + postDeck + postDiscard;
+  if(postHand == preHand && preTotal == postTotal){  //return 1 (true) if the size of the hands of both decks are the same and total number of cards in deck/hand/discard is the same
     return 1;
   }
   else{
@@ -55,36 +19,18 @@ int assertTrue(int sumPre, int sumPost, int diffOrder){
   }
 }
 
-int checkShuffle(int player, struct gameState *pre, struct gameState *post){
-  int i;
-  int sumPre = 0;
-  int sumPost = 0;
-  int diffOrder = 0; //assumes decks are not shuffled
-
-  for(i = 0; i < post->deckCount[player]; i++){
-    printf("post[%d] = %d\n", i, post->deck[player][i]);
+int checkSmithyCard(int p, struct gameState *pre, struct gameState *post){
+  int numDrawn = 3;
+  int ogHandCount = pre->handCount[p];
+  int newHandCount = post->handCount[p];
+  for (int i = 0; i < numDrawn; i++){  //execute drawcard for three cards as stated in business rules
+     drawCard(p, pre);
   }
-  for(i = 0; i < pre->deckCount[player]; i++){
-    printf("pre[%d] = %d\n", i, pre->deck[player][i]);
+  if (assertTrue(pre->handCount[p], pre->deckCount[p], pre->discardCount[p], post->handCount[p], post->deckCount[p], post->discardCount[p])){
+    printf("Passed: %d cards added to the hand\n", newHandCount - ogHandCount);
   }
-
-  if(pre->deckCount[player] == post->deckCount[player]){  //check if decks are equal size
-    for(i = 0; i < pre->deckCount[player]; i++){  //sum element of decks and check order
-      if(pre->deck[player][i] != post->deck[player][i]){
-        diffOrder = 1;  //decks are shuffled
-      }
-      sumPre = sumPre + pre->deck[player][i];
-      sumPost = sumPost + post->deck[player][i];
-    }
-    if(assertTrue(sumPre, sumPost, diffOrder) == 1){
-      printf("Passed: Deck is shuffled.  DiffOrder = %d:  sumPre= %d:  sumPost= %d\n", diffOrder, sumPre, sumPost);
-    }
-    else{
-      printf("Failed: Deck is not shuffled.  DiffOrder = %d:  sumPre= %d:  sumPost= %d\n", diffOrder, sumPre, sumPost); //deck is not in order or the sum or elements is not equal
-    }
-  }
-  else{  //decks not equal size, test fails
-    printf("Failed:  decks not the same size\n");
+  else{
+    printf("Failed: %d cards added to the hand\n", newHandCount - ogHandCount);  //expect all test to fail because of added bug that cause code to draw 2 instead of 3 cards
   }
   return 0;
 }
@@ -92,17 +38,19 @@ int checkShuffle(int player, struct gameState *pre, struct gameState *post){
 int main () {
 
   int i, n, p;
+  int bonus = -1;
   struct gameState pre;
   struct gameState post;
 
-  printf ("Testing shuffle()\n");
+  printf("____________________\n");
+  printf ("Testing SmithyCard.\n");
 
   printf ("RANDOM TESTS.\n");
 
   SelectStream(2);
   PutSeed(3);
 
-  for (n = 0; n < 20000; n++) {  //create random test state for the game.
+  for (n = 0; n < 20; n++) {  //create random test state for the game.
     printf("test#: %d\n", n);
     for (i = 0; i < sizeof(struct gameState); i++) {
       ((char*)&pre)[i] = floor(Random() * 256);
@@ -110,15 +58,40 @@ int main () {
 
     //Create random deck, hand, and discard
     p = floor(Random() * 2);
-    pre.deckCount[p] = 10;//floor(Random() * MAX_DECK);
+    pre.deckCount[p] = floor(Random() * MAX_DECK);
     for(i = 0; i < pre.deckCount[p]; i++){
       pre.deck[p][i]=floor(Random() * 26);
     }
+    pre.discardCount[p] = floor(Random() * MAX_DECK);
+    for(i = 0; i < pre.discardCount[p]; i++){
+      pre.discard[p][i]=floor(Random() * 26);
+    }
+    pre.handCount[p] = floor(Random() * MAX_HAND);
+    for(i = 0; i < pre.handCount[p]; i++){
+      pre.hand[p][i]=floor(Random() * 26);
+    }
+    pre.whoseTurn = p;
     memcpy (&post, &pre, sizeof(struct gameState));
-    shuffle(p, &post);
-    checkShuffle(p, &pre, &post);
-    //checkCode();
+    cardEffect(smithy, -1, -1, -1, &post, -1, &bonus);
+    checkSmithyCard(p, &pre, &post);
   }
+
+  printf ("SIMPLE FIXED TESTS.\n");  //Test to see if drawCard draws from discard when deck is empty
+  pre.deckCount[p] = 0;
+  for(i = 0; i < pre.deckCount[MAX_DECK]; i++){
+    pre.deck[p][i]=-1;
+  }
+  pre.discardCount[p] = floor(Random() * MAX_DECK);
+  for(i = 0; i < pre.discardCount[p]; i++){
+    pre.discard[p][i]=floor(Random() * 26);
+  }
+  pre.handCount[p] = floor(Random() * MAX_HAND);
+  for(i = 0; i < pre.handCount[p]; i++){
+    pre.hand[p][i]=floor(Random() * 26);
+  }
+  memcpy (&post, &pre, sizeof(struct gameState));
+  cardEffect(smithy, -1, -1, -1, &post, -1, &bonus);
+  checkSmithyCard(p, &pre, &post);
 
   return 0;
 }

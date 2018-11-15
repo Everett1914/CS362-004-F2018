@@ -212,7 +212,7 @@ int shuffle(int player, struct gameState *state) {
   /* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
 
   while (state->deckCount[player] > 0) {
-    card = floor(Random() * state->deckCount[player]);  //chooses random postion
+    card = floor(Random() * state->deckCount[player]);
     newDeck[newDeckPos] = state->deck[player][card];
     newDeckPos++;
     for (i = card; i < state->deckCount[player]-1; i++) {
@@ -707,9 +707,9 @@ int stewardCard(int currentPlayer, struct gameState *state, int handPos, int cho
 
 int cutpurseCard(int currentPlayer, struct gameState *state, int handPos){
   updateCoins(currentPlayer, state, 2);
-  for (int i = 0; i <= state->numPlayers; i++){
+  for (int i = 0; i < state->numPlayers; i++){
      if (i != currentPlayer){
-        for (int j = 0; j <= state->handCount[i]; j++){
+        for (int j = 0; j < state->handCount[i]; j++){
             if (state->hand[i][j] == copper){
                 discardCard(j, i, state, 0);
                 break;
@@ -721,9 +721,9 @@ int cutpurseCard(int currentPlayer, struct gameState *state, int handPos){
                 }
                 break;
             }
-       }
+        }
      }
-   }
+  }
   //discard played card from hand
   discardCard(handPos, currentPlayer, state, 0);
   return 0;
@@ -1177,40 +1177,37 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
     case sea_hag:
       for (i = 0; i < state->numPlayers; i++){
-	if (i != currentPlayer){
-	  state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];			    state->deckCount[i]--;
-	  state->discardCount[i]++;
-	  state->deck[i][state->deckCount[i]--] = curse;//Top card now a curse
-	}
+	       if (i != currentPlayer){
+	          state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];
+            state->deckCount[i]--;
+	          state->discardCount[i]++;
+	          state->deck[i][state->deckCount[i]--] = curse;//Top card now a curse
+	       }
       }
       return 0;
 
     case treasure_map:
       //search hand for another treasure_map
       index = -1;
-      for (i = 0; i < state->handCount[currentPlayer]; i++)
-	{
-	  if (state->hand[currentPlayer][i] == treasure_map && i != handPos)
-	    {
-	      index = i;
-	      break;
+      for (i = 0; i < state->handCount[currentPlayer]; i++){
+	       if (state->hand[currentPlayer][i] == treasure_map && i != handPos){
+	          index = i;
+	          break;
+	       }
 	    }
-	}
-      if (index > -1)
-	{
-	  //trash both treasure cards
-	  discardCard(handPos, currentPlayer, state, 1);
-	  discardCard(index, currentPlayer, state, 1);
+      if (index > -1){
+      	  //trash both treasure cards
+      	  discardCard(handPos, currentPlayer, state, 1);
+      	  discardCard(index, currentPlayer, state, 1);
 
-	  //gain 4 Gold cards
-	  for (i = 0; i < 4; i++)
-	    {
-	      gainCard(gold, state, 1, currentPlayer);
-	    }
+      	  //gain 4 Gold cards
+      	  for (i = 0; i < 4; i++){
+      	      gainCard(gold, state, 1, currentPlayer);
+      	  }
 
-	  //return success
-	  return 1;
-	}
+  	  //return success
+  	  return 1;
+  	  }
 
       //no second treasure_map found in hand
       return -1;
@@ -1220,7 +1217,6 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 }
 
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag){
-
   //if card is not trashed, added to Played pile
   if (trashFlag < 1)
     {
@@ -1228,10 +1224,8 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
       state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos];
       state->playedCardCount++;
     }
-
   //set played card to -1
   state->hand[currentPlayer][handPos] = -1;
-
   //remove card from player's hand
   if ( handPos == (state->handCount[currentPlayer] - 1) ) 	//last card in hand array is played
     {
@@ -1252,7 +1246,6 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
       //reduce number of cards in hand
       state->handCount[currentPlayer]--;
     }
-
   return 0;
 }
 
