@@ -656,7 +656,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
   int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
- 
+
   if (nextPlayer > (state->numPlayers - 1)){
     nextPlayer = 0;
   }
@@ -667,7 +667,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     {
     case adventurer:
       return play_adventurer(state, currentPlayer);
-  
+
     case council_room:
       return play_council_room(state, currentPlayer, handPos);
 
@@ -733,10 +733,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
 
-      if ( (getCost(state->hand[currentPlayer][choice1]) + 2) > getCost(choice2) )
-	{
-	  return -1;
-	}
+      if ( (getCost(state->hand[currentPlayer][choice1]) + 2) > getCost(choice2) ){
+	       return -1;
+	    }
 
       gainCard(choice2, state, 0, currentPlayer);
 
@@ -744,16 +743,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
 
       //discard trashed card
-      for (i = 0; i < state->handCount[currentPlayer]; i++)
-	{
-	  if (state->hand[currentPlayer][i] == j)
-	    {
-	      discardCard(i, currentPlayer, state, 0);
-	      break;
+      for (i = 0; i < state->handCount[currentPlayer]; i++){
+	       if (state->hand[currentPlayer][i] == j){
+	          discardCard(i, currentPlayer, state, 0);
+	           break;
+	       }
 	    }
-	}
-
-
       return 0;
 
     case smithy:
@@ -1093,11 +1088,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
     case sea_hag:
       for (i = 0; i < state->numPlayers; i++){
-	if (i != currentPlayer){
-	  state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];			    state->deckCount[i]--;
-	  state->discardCount[i]++;
-	  state->deck[i][state->deckCount[i]--] = curse;//Top card now a curse
-	}
+      	if (i != currentPlayer){
+      	  state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];
+          state->deckCount[i]--;
+      	  state->discardCount[i]++;
+      	  state->deck[i][state->deckCount[i]--] = curse;//Top card now a curse
+      	}
       }
       return 0;
 
@@ -1245,13 +1241,13 @@ int updateCoins(int player, struct gameState *state, int bonus)
 int play_adventurer(struct gameState* state, int currentPlayer){
 
   // BUG
-  int drawntreasure;
+  int drawntreasure = 0;  //fixed by initializing to zero.
   int cardDrawn;
   int temphand[MAX_HAND];// moved above the if statement
   int temphandIdx = 0;
 
   // BUG
-  while(drawntreasure < 3){
+  while(drawntreasure < 2){  //fixed by changing 3 to 2
       if(state->deckCount[currentPlayer] < 1){
         shuffle(currentPlayer, state);
       }
@@ -1283,7 +1279,8 @@ int play_smithy(struct gameState* state, int currentPlayer, int handPos){
 
   //discard card from hand
   // BUG
-  discardCard(currentPlayer, handPos, state, 0);
+  //discardCard(handPos, currentPlayer, state, 0); //Corrected code
+  discardCard(currentPlayer, handPos, state, 0);  //bug
 
   return 0;
 }

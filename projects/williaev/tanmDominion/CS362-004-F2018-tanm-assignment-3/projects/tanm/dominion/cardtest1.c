@@ -32,8 +32,8 @@ int main (int argc, char** argv) {
   printf("Test to see if hand is adjusted properly after playing smithy.\n");
 	cardEffect(smithy, choice1, choice2, choice3, &testG, handpos, &bonus);
   player = 0;
-  expectVal = 8;  //intialization leaves 5 cards in hand so smithy should add 3.
-  if(G.handCount[player] == expectVal){
+  expectVal = 7;  //intialization leaves 5 cards in hand so smithy should add 3.
+  if(testG.handCount[player] == expectVal){
     printf("smithy test:  Pass-Expected value %d:  Result %d\n", expectVal, testG.handCount[player]);
   }
   else{
@@ -43,7 +43,7 @@ int main (int argc, char** argv) {
   printf("______________________________________________________________\n");
   printf("Test to see if deck is adjusted properly after playing smithy.\n");
   expectVal = 2;  //intialization leaves 5 cards in deck so smithy should remove 3.
-  if(G.deckCount[player] == expectVal){
+  if(testG.deckCount[player] == expectVal){
     printf("smithy test:  Pass-Expected value %d:  Result %d\n", expectVal, testG.deckCount[player]);
   }
   else{

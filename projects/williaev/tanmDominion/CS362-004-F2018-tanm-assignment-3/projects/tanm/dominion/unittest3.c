@@ -21,8 +21,8 @@ int assertShuffle(int originalArr[], int shuffledArr[], int player, struct gameS
   int i;
   result0 = 0;  //assume array is shuffled
   for(i = 0; i < state->deckCount[player]; i++){ //copy of array after shuffle
-    printf("Original: %d\n", originalArr[i]);
-    printf("Shuffled: %d\n", shuffledArr[i]);
+    //printf("Original: %d\n", originalArr[i]);
+    //printf("Shuffled: %d\n", shuffledArr[i]);
     if(originalArr[i] != shuffledArr[i]){  //arrays are not in same order
       result0 = 1;
     }
@@ -72,10 +72,12 @@ int main (int argc, char** argv) {
   testDeckCount = G.deckCount[player];
   for(i = 0; i < testDeckCount; i++){ //copy of array before shuffle
     testDeck0[i] = G.deck[player][i];
+    //printf("testDeck0: %d\n", G.deck[player][i]);
   }
   shuffle(player, &G);  //shuffle original array
   for(i = 0; i < testDeckCount; i++){ //copy of array after shuffle
     testDeck1[i] = G.deck[player][i];
+    //printf("testDeck1: %d\n", G.deck[player][i]);
   }
   assertShuffle(testDeck0, testDeck1, player, &G);  //test to see if test and original arrays are the same
   printf("___________________________________________________________________________\n");
