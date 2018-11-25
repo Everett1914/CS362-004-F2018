@@ -576,7 +576,6 @@ int drawCard(int player, struct gameState *state)
     state->deckCount[player]--;
     state->handCount[player]++;//Increment hand count
   }
-
   return 0;
 }
 
@@ -1141,7 +1140,6 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
       state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos];
       state->playedCardCount++;
     }
-
   //set played card to -1
   state->hand[currentPlayer][handPos] = -1;
 
@@ -1165,7 +1163,6 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
       //reduce number of cards in hand
       state->handCount[currentPlayer]--;
     }
-
   return 0;
 }
 
@@ -1276,12 +1273,10 @@ int play_smithy(struct gameState* state, int currentPlayer, int handPos){
   for (i = 0; i < 3; i++){
     drawCard(currentPlayer, state);
   }
-
   //discard card from hand
   // BUG
-  //discardCard(handPos, currentPlayer, state, 0); //Corrected code
-  discardCard(currentPlayer, handPos, state, 0);  //bug
-
+  discardCard(handPos, currentPlayer, state, 0); //Corrected code
+  //discardCard(currentPlayer, handPos, state, 0);  //bug
   return 0;
 }
 

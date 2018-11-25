@@ -49,10 +49,10 @@ int checkAdventurerCard(int player, struct gameState *pre, struct gameState *pos
 
   //assert(memcmp(&pre, post, sizeof(struct gameState)) == 0);  //memcmp could not be used due to randomness of shuffle.
   if(assertTrue(pre->handCount[player], pre->deckCount[player], pre->discardCount[player], post->handCount[player], post->deckCount[player], post->discardCount[player])){
-    printf("Test Passed\n");
+    //printf("Test Passed\n");
   }
   else{
-    printf("Test Failed\n");
+    //printf("Test Failed\n");
   }
   return 0;
 }

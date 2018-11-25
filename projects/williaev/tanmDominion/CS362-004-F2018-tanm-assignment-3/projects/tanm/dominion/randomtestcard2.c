@@ -33,10 +33,10 @@ int checkCutpurseCard(int p, struct gameState *pre, struct gameState *post){
     j++;
   }
   if(assertTrue(found, pre->handCount[opponent], post->handCount[opponent])){
-    printf("Passed\n");
+    //printf("Passed\n");
   }
   else{
-    printf("Failed\n");
+    //printf("Failed\n");
   }
   return 0;
 }
