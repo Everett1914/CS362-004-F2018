@@ -1,0 +1,60 @@
+diff URLValidatorCorrect/src/DomainValidator.java URLValidatorInCorrect/src/DomainValidator.java
+78a79
+>     //private static final String TOP_LABEL_REGEX = "\\p{Alpha}(?>[\\p{Alnum}-]{0,61}\\p{Alnum})?";
+165c166
+<             return isValidTld(groups[0]);
+---
+>             return !isValidTld(groups[0]);
+diff URLValidatorCorrect/src/InetAddressValidator.java URLValidatorInCorrect/src/InetAddressValidator.java
+68c68
+<         return VALIDATOR;
+---
+>     	return null;
+77c77
+<         return isValidInet4Address(inetAddress) || isValidInet6Address(inetAddress);
+---
+>        return isValidInet4Address(inetAddress) || isValidInet6Address(inetAddress);
+88,89c88
+< 
+<         if (groups == null) {
+---
+>        if (groups != null) {
+108c107
+<                 return false;
+---
+>             		return true;
+diff URLValidatorCorrect/src/RegexValidator.java URLValidatorInCorrect/src/RegexValidator.java
+120c120
+<         if (regexs == null || regexs.length == 0) {
+---
+>         if (regexs != null || regexs.length == 0) {
+125c125
+<         for (int i = 0; i < regexs.length; i++) {
+---
+>         for (int i = 0; i < regexs.length-1; i++) {
+diff URLValidatorCorrect/src/ResultPair.java URLValidatorInCorrect/src/ResultPair.java
+30c30
+<          this.valid = valid;  //Weather the individual part of url is valid.
+---
+>          this.valid = !valid;  //Weather the individual part of url is valid.
+diff URLValidatorCorrect/src/UrlValidator.java URLValidatorInCorrect/src/UrlValidator.java
+167c167
+<     private static final String PATH_REGEX = "^(/[-\\w:@&?=+,.!/~*'%$_;\\(\\)]*)?$";
+---
+>     private static final String PATH_REGEX = "^(/[-\\w:@&?=+,.!*'%$_;\\(\\)]*)?$";
+192c192,194
+<     private static final String[] DEFAULT_SCHEMES = {"http", "https", "ftp"}; // Must be lower-case
+---
+>    private static final String[] DEFAULT_SCHEMES = {"http", "https", "ftp"}; // Must be lower-case
+> 
+> 
+280c282,283
+<                 allowedSchemes.add(schemes[i].toLowerCase(Locale.ENGLISH));
+---
+>                 allowedSchemes.add(schemes[i].toUpperCase(Locale.ENGLISH));
+> 
+314c317,318
+<         if ("file".equals(scheme)) {// Special case - file: allows an empty authority
+---
+> 
+>         if ("https".equals(scheme)) {// Special case - file: allows an empty authority
